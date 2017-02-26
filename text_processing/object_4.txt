@@ -1,0 +1,22 @@
+CREATE OR REPLACE TRIGGER orders_before_insert
+BEFORE INSERT
+   ON orders
+   FOR EACH ROW
+
+DECLARE
+   v_username varchar2(10);
+
+BEGIN
+
+   -- Find username of person performing INSERT into table
+   SELECT user INTO v_username
+   FROM dual;
+
+   -- Update create_date field to current system date
+   :new.create_date := sysdate;
+
+   -- Update created_by field to the username of the person performing the INSERT
+   :new.created_by := v_username;
+
+END;
+/
